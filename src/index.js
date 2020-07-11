@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const {
   USERNAME,
   PASSWORD,
+  TP_LINK_HOST: host
 } = process.env;
 
 const agentOptions = {
@@ -16,7 +17,7 @@ const agentOptions = {
 const jar = rp.jar();
 
 const headers = {
-  'Referer': 'https://192.168.0.254',
+  'Referer': `https://${host}`,
 };
 
 /**
@@ -34,7 +35,7 @@ function encode(str) {
  * be authenticated.
  */
 async function login() {
-  const loginUrl = 'https://192.168.0.254/data/version.json';
+  const loginUrl = `https://${host}/data/version.json`;
   await rp(loginUrl, { agentOptions, jar });
 
   // Extract nonce from cookie jar
@@ -62,7 +63,7 @@ async function login() {
 }
 
 async function getInfo() {
-  return rp('https://192.168.0.254/data/info.json', { 
+  return rp(`https://${host}/data/info.json`, { 
     agentOptions, jar, headers, json: true,
   })
 }
