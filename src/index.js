@@ -63,9 +63,14 @@ async function login() {
 }
 
 async function getInfo() {
-  return rp(`https://${host}/data/info.json`, { 
+  const { success, data, ...rest } = await rp(`https://${host}/data/info.json`, { 
     agentOptions, jar, headers, json: true,
-  })
+  });
+  if(!success) {
+    console.error({ success, data, rest })
+    throw 'Failed to fetch info';
+  }
+  return data;
 }
 
 
